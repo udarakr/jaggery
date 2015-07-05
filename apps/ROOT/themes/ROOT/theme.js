@@ -29,8 +29,12 @@ var engine = caramel.engine('handlebars', ( function() {
 				};
 				//TODO : we don't need to register all partials in the themes dir.
 				//Rather register only not overridden partials
-				partials(new File(theme.__proto__.resolve.call(theme, 'partials')));
-				partials(new File(theme.resolve('partials')));
+				var partial_1 = new File(theme.__proto__.resolve.call(theme, 'partials'));
+				var partial_2 = new File(theme.resolve('partials'));
+				partials(partial_1);
+				partial_1.close();
+				partials(partial_2);
+				partial_2.close();
 
 				Handlebars.registerHelper('render', function(row) {
 					var api = request.getParameter('api');
@@ -56,6 +60,7 @@ var engine = caramel.engine('handlebars', ( function() {
 							} else {
 								file.open("r");
 								col += file.readAll();
+								file.close();
 							}
 						} else {
 							col += row[key];
